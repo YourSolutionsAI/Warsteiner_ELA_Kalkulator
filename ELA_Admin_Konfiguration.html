@@ -1,0 +1,1450 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ELA Admin · Konfiguration</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&family=Figtree:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --ink:      #0a0e14;
+  --ink-80:   #1c2530;
+  --ink-60:   #2e3a46;
+  --slate:    #8394a4;
+  --mist:     #c8d4de;
+  --fog:      #edf1f5;
+  --snow:     #f7f9fb;
+  --page:     #f0f3f7;
+  --gold:     #e8a020;
+  --gold-pale:#fdf4e3;
+  --teal:     #0d7c66;
+  --teal-pale:#e5f3f0;
+  --red:      #c0392b;
+  --red-pale: #fdf1f0;
+  --green:    #1a7a4a;
+  --green-pale:#edf7f2;
+  --blue:     #1a5f9e;
+  --blue-pale:#e8f0fa;
+  --nav-w:    200px;
+  --r:        8px;
+  --r-lg:     14px;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin:0; padding:0; }
+
+body {
+  font-family: 'Figtree', sans-serif;
+  background: var(--page);
+  color: var(--ink);
+  height: 100vh;
+  overflow: hidden;
+  display: flex;
+  font-size: 13.5px;
+  line-height: 1.5;
+}
+
+/* ── SIDEBAR ─────────────────────────────────── */
+aside {
+  width: var(--nav-w);
+  background: var(--ink);
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+}
+
+.aside-top {
+  padding: 20px 16px 16px;
+  border-bottom: 1px solid rgba(255,255,255,.06);
+}
+.aside-logo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 4px;
+}
+.aside-logo-mark {
+  width: 28px; height: 28px;
+  background: var(--gold);
+  border-radius: 7px;
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Syne', sans-serif;
+  font-weight: 800;
+  font-size: 13px;
+  color: var(--ink);
+  flex-shrink: 0;
+}
+.aside-logo-text {
+  font-family: 'Syne', sans-serif;
+  font-weight: 700;
+  font-size: 13px;
+  color: #fff;
+  letter-spacing: .02em;
+}
+.aside-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: rgba(232,160,32,.15);
+  color: var(--gold);
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  padding: 2px 7px;
+  border-radius: 20px;
+  border: 1px solid rgba(232,160,32,.3);
+}
+.aside-badge::before {
+  content: '';
+  width: 5px; height: 5px;
+  background: var(--gold);
+  border-radius: 50%;
+}
+
+.aside-section {
+  padding: 14px 12px 4px;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,.25);
+}
+
+.aside-item {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 9px 12px;
+  margin: 1px 6px;
+  border-radius: 7px;
+  cursor: pointer;
+  color: rgba(255,255,255,.5);
+  font-size: 12.5px;
+  font-weight: 500;
+  transition: all .15s;
+  position: relative;
+}
+.aside-item:hover { background: rgba(255,255,255,.06); color: rgba(255,255,255,.85); }
+.aside-item.active {
+  background: rgba(232,160,32,.12);
+  color: var(--gold);
+  border: 1px solid rgba(232,160,32,.2);
+}
+.aside-item-dot {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: var(--red);
+  margin-left: auto;
+  flex-shrink: 0;
+}
+.aside-item-dot.ok { background: var(--green); }
+
+.aside-spacer { flex: 1; }
+.aside-footer {
+  padding: 12px 12px;
+  border-top: 1px solid rgba(255,255,255,.06);
+  font-size: 11px;
+  color: rgba(255,255,255,.2);
+}
+.aside-footer strong { color: rgba(255,255,255,.4); }
+
+/* ── MAIN ─────────────────────────────────── */
+main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  min-width: 0;
+}
+
+.topbar {
+  height: 54px;
+  background: #fff;
+  border-bottom: 1px solid var(--mist);
+  display: flex;
+  align-items: center;
+  padding: 0 24px;
+  gap: 12px;
+  flex-shrink: 0;
+}
+.topbar-crumb {
+  font-size: 11px;
+  color: var(--slate);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.topbar-crumb span { color: var(--ink); font-weight: 600; }
+.topbar-spacer { flex: 1; }
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 14px;
+  border-radius: var(--r);
+  font-family: 'Figtree', sans-serif;
+  font-size: 12.5px;
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+  transition: all .15s;
+  white-space: nowrap;
+}
+.btn-gold {
+  background: var(--gold);
+  color: var(--ink);
+  box-shadow: 0 2px 8px rgba(232,160,32,.3);
+}
+.btn-gold:hover { background: #d4911c; transform: translateY(-1px); }
+.btn-ghost {
+  background: transparent;
+  color: var(--ink-60);
+  border: 1px solid var(--mist);
+}
+.btn-ghost:hover { background: var(--fog); }
+.btn-danger {
+  background: var(--red-pale);
+  color: var(--red);
+  border: 1px solid #f5c6c1;
+}
+.btn-danger:hover { background: #fbe5e3; }
+.btn-sm { padding: 5px 10px; font-size: 11.5px; }
+
+/* ── CONTENT ─────────────────────────────────── */
+.content {
+  flex: 1;
+  overflow-y: auto;
+  padding: 24px;
+}
+.page { display: none; }
+.page.active { display: block; animation: fadeUp .2s ease; }
+@keyframes fadeUp { from { opacity:0; transform:translateY(8px); } to { opacity:1; transform:translateY(0); } }
+
+/* ── CARD ─────────────────────────────────── */
+.card {
+  background: #fff;
+  border-radius: var(--r-lg);
+  border: 1px solid var(--mist);
+  box-shadow: 0 1px 4px rgba(10,14,20,.05);
+  margin-bottom: 20px;
+  overflow: hidden;
+}
+.card-head {
+  padding: 14px 20px;
+  border-bottom: 1px solid var(--fog);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.card-head-icon {
+  width: 30px; height: 30px;
+  border-radius: 8px;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+  font-size: 14px;
+}
+.card-head-title {
+  font-family: 'Syne', sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--ink);
+}
+.card-head-sub { font-size: 11px; color: var(--slate); margin-top: 1px; }
+.card-head-actions { margin-left: auto; display: flex; gap: 8px; align-items: center; }
+.card-body { padding: 20px; }
+
+/* ── EDITABLE TABLE ─────────────────────────────────── */
+.etable {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12.5px;
+}
+.etable thead th {
+  background: var(--ink);
+  color: rgba(255,255,255,.8);
+  padding: 9px 12px;
+  text-align: left;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+.etable thead th:first-child { border-radius: 7px 0 0 0; }
+.etable thead th:last-child  { border-radius: 0 7px 0 0; }
+.etable tbody td {
+  padding: 0;
+  border-bottom: 1px solid var(--fog);
+  vertical-align: middle;
+}
+.etable tbody tr:last-child td { border-bottom: none; }
+.etable tbody tr:hover td { background: #fafbfc; }
+.etable td.pad { padding: 8px 12px; }
+
+.etable input[type="text"],
+.etable input[type="number"] {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+  padding: 7px 10px;
+  border: none;
+  background: transparent;
+  width: 100%;
+  outline: none;
+  color: var(--ink);
+  transition: background .15s;
+}
+.etable input:focus {
+  background: var(--gold-pale);
+  border-radius: 4px;
+  box-shadow: inset 0 0 0 1.5px var(--gold);
+}
+.etable .num-cell { text-align: right; }
+.etable .num-cell input { text-align: right; }
+
+.row-actions {
+  display: flex;
+  gap: 4px;
+  padding: 6px 10px;
+  opacity: 0;
+  transition: opacity .15s;
+}
+.etable tbody tr:hover .row-actions { opacity: 1; }
+.row-btn {
+  width: 24px; height: 24px;
+  border-radius: 5px;
+  border: 1px solid var(--mist);
+  background: #fff;
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  color: var(--slate);
+  transition: all .12s;
+  font-size: 11px;
+}
+.row-btn:hover { background: var(--red-pale); color: var(--red); border-color: #f5c6c1; }
+.row-btn.edit:hover { background: var(--blue-pale); color: var(--blue); border-color: #c0d8f5; }
+
+.add-row-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 12px;
+  cursor: pointer;
+  color: var(--slate);
+  font-size: 12px;
+  font-weight: 500;
+  border-top: 1px dashed var(--mist);
+  transition: all .15s;
+  background: var(--snow);
+}
+.add-row-btn:hover { background: var(--gold-pale); color: var(--gold); }
+
+/* ── TABS ─────────────────────────────────── */
+.tabs {
+  display: flex;
+  gap: 2px;
+  padding: 4px;
+  background: var(--fog);
+  border-radius: 9px;
+  margin-bottom: 20px;
+}
+.tab {
+  padding: 7px 16px;
+  border-radius: 7px;
+  cursor: pointer;
+  font-size: 12.5px;
+  font-weight: 500;
+  color: var(--slate);
+  transition: all .15s;
+}
+.tab.active {
+  background: #fff;
+  color: var(--ink);
+  font-weight: 600;
+  box-shadow: 0 1px 4px rgba(10,14,20,.08);
+}
+
+/* ── SETTING ROW ─────────────────────────────────── */
+.setting-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 20px;
+  padding: 16px 0;
+  border-bottom: 1px solid var(--fog);
+}
+.setting-row:last-child { border-bottom: none; }
+.setting-info { flex: 1; }
+.setting-label {
+  font-weight: 600;
+  font-size: 13px;
+  color: var(--ink);
+  margin-bottom: 2px;
+}
+.setting-desc { font-size: 11.5px; color: var(--slate); line-height: 1.5; }
+.setting-control { flex-shrink: 0; min-width: 200px; }
+
+.setting-control input,
+.setting-control select {
+  font-family: 'Figtree', sans-serif;
+  font-size: 13px;
+  padding: 8px 12px;
+  border: 1.5px solid var(--mist);
+  border-radius: var(--r);
+  background: #fff;
+  color: var(--ink);
+  width: 100%;
+  outline: none;
+  transition: border-color .15s;
+}
+.setting-control input:focus,
+.setting-control select:focus {
+  border-color: var(--gold);
+  box-shadow: 0 0 0 3px rgba(232,160,32,.12);
+}
+
+/* ── TOGGLE ─────────────────────────────────── */
+.toggle-wrap { display: flex; align-items: center; gap: 8px; }
+.toggle {
+  position: relative;
+  width: 40px; height: 22px;
+  cursor: pointer;
+}
+.toggle input { opacity: 0; width: 0; height: 0; }
+.toggle-track {
+  position: absolute;
+  inset: 0;
+  background: var(--mist);
+  border-radius: 11px;
+  transition: background .2s;
+}
+.toggle input:checked + .toggle-track { background: var(--teal); }
+.toggle-thumb {
+  position: absolute;
+  top: 3px; left: 3px;
+  width: 16px; height: 16px;
+  background: #fff;
+  border-radius: 50%;
+  transition: transform .2s;
+  box-shadow: 0 1px 3px rgba(0,0,0,.2);
+}
+.toggle input:checked ~ .toggle-thumb { transform: translateX(18px); }
+.toggle-label { font-size: 12.5px; color: var(--slate); }
+
+/* ── STAT STRIP ─────────────────────────────────── */
+.stat-strip {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  margin-bottom: 20px;
+}
+.stat-card {
+  background: #fff;
+  border-radius: var(--r-lg);
+  border: 1px solid var(--mist);
+  padding: 16px 18px;
+  box-shadow: 0 1px 4px rgba(10,14,20,.04);
+}
+.stat-label {
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .1em;
+  color: var(--slate);
+  margin-bottom: 6px;
+}
+.stat-val {
+  font-family: 'Syne', sans-serif;
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--ink);
+  line-height: 1;
+}
+.stat-change {
+  font-size: 11px;
+  margin-top: 4px;
+  color: var(--slate);
+}
+.stat-change.up { color: var(--green); }
+.stat-change.down { color: var(--red); }
+
+/* ── CHANGELOG ─────────────────────────────────── */
+.changelog-row {
+  display: flex;
+  gap: 14px;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--fog);
+  align-items: flex-start;
+}
+.changelog-row:last-child { border-bottom: none; }
+.changelog-time {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  color: var(--slate);
+  min-width: 80px;
+  padding-top: 2px;
+}
+.changelog-dot {
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  margin-top: 4px;
+  flex-shrink: 0;
+}
+.changelog-text { font-size: 12.5px; color: var(--ink); }
+.changelog-text strong { font-weight: 600; }
+.changelog-user { font-size: 11px; color: var(--slate); margin-top: 2px; }
+
+/* ── ALERT BOX ─────────────────────────────────── */
+.alert {
+  display: flex;
+  gap: 10px;
+  padding: 12px 16px;
+  border-radius: var(--r);
+  margin-bottom: 16px;
+  font-size: 12.5px;
+  align-items: flex-start;
+}
+.alert-warn { background: var(--gold-pale); border: 1px solid #f5d98a; color: #7a5500; }
+.alert-info { background: var(--blue-pale); border: 1px solid #b8d4f0; color: #1a4070; }
+
+/* ── TAG ─────────────────────────────────── */
+.tag {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 8px;
+  border-radius: 5px;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: .03em;
+}
+.tag-gold   { background: var(--gold-pale);  color: #7a5500; }
+.tag-teal   { background: var(--teal-pale);  color: var(--teal); }
+.tag-red    { background: var(--red-pale);   color: var(--red); }
+.tag-green  { background: var(--green-pale); color: var(--green); }
+.tag-blue   { background: var(--blue-pale);  color: var(--blue); }
+.tag-slate  { background: var(--fog);        color: var(--slate); }
+
+/* ── SCROLLBAR ─────────────────────────────────── */
+::-webkit-scrollbar { width: 5px; }
+::-webkit-scrollbar-thumb { background: var(--mist); border-radius: 3px; }
+
+/* ── TOAST ─────────────────────────────────── */
+.toast {
+  position: fixed;
+  bottom: 24px; right: 24px;
+  background: var(--ink);
+  color: #fff;
+  padding: 11px 18px;
+  border-radius: 10px;
+  font-size: 13px;
+  font-weight: 500;
+  box-shadow: 0 8px 24px rgba(0,0,0,.25);
+  display: flex; align-items: center; gap: 8px;
+  transform: translateY(60px); opacity: 0;
+  transition: all .3s cubic-bezier(.34,1.56,.64,1);
+  z-index: 999;
+}
+.toast.show { transform: translateY(0); opacity: 1; }
+.toast-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--gold); }
+
+/* ── MODAL OVERLAY ─────────────────────────────────── */
+.modal-overlay {
+  position: fixed; inset: 0;
+  background: rgba(10,14,20,.5);
+  backdrop-filter: blur(3px);
+  z-index: 500;
+  display: none;
+  align-items: center;
+  justify-content: center;
+}
+.modal-overlay.show { display: flex; }
+.modal-box {
+  background: #fff;
+  border-radius: 16px;
+  padding: 28px;
+  width: 480px;
+  max-width: 95vw;
+  box-shadow: 0 24px 60px rgba(0,0,0,.2);
+  animation: fadeUp .25s ease;
+}
+.modal-title {
+  font-family: 'Syne', sans-serif;
+  font-size: 16px;
+  font-weight: 700;
+  margin-bottom: 6px;
+}
+.modal-sub { font-size: 12.5px; color: var(--slate); margin-bottom: 20px; }
+.modal-form { display: flex; flex-direction: column; gap: 14px; }
+.modal-field { display: flex; flex-direction: column; gap: 5px; }
+.modal-label { font-size: 11px; font-weight: 700; color: var(--ink-60); text-transform: uppercase; letter-spacing: .05em; }
+.modal-input {
+  font-family: 'Figtree', sans-serif;
+  font-size: 13px;
+  padding: 9px 12px;
+  border: 1.5px solid var(--mist);
+  border-radius: var(--r);
+  outline: none;
+  transition: border-color .15s;
+}
+.modal-input:focus { border-color: var(--gold); box-shadow: 0 0 0 3px rgba(232,160,32,.12); }
+.modal-actions { display: flex; gap: 10px; justify-content: flex-end; margin-top: 8px; }
+
+/* ── TWO COL ─────────────────────────────────── */
+.two-col { display: grid; grid-template-columns: 1fr 340px; gap: 20px; align-items: start; }
+</style>
+</head>
+<body>
+
+<!-- ════════════════════════════════════════════
+     SIDEBAR
+════════════════════════════════════════════ -->
+<aside>
+  <div class="aside-top">
+    <div class="aside-logo">
+      <div class="aside-logo-mark">ELA</div>
+      <span class="aside-logo-text">Admin Panel</span>
+    </div>
+    <span class="aside-badge">Konfiguration</span>
+  </div>
+
+  <span class="aside-section">Stammdaten</span>
+  <div class="aside-item active" onclick="nav('rp', this)">
+    <svg width="14" height="14" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M17.707 9.293a1 1 0 010 1.414l-7 7a1 1 0 01-1.414 0l-7-7A.997.997 0 012 10V5a3 3 0 013-3h5c.256 0 .512.098.707.293l7 7zM5 6a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/></svg>
+    Rampenpreise (RP)
+    <div class="aside-item-dot ok"></div>
+  </div>
+  <div class="aside-item" onclick="nav('pk', this)">
+    <svg width="14" height="14" viewBox="0 0 20 20" fill="currentColor"><path d="M8.433 7.418c.155-.103.346-.196.567-.267v1.698a2.305 2.305 0 01-.567-.267C8.07 8.34 8 8.114 8 8c0-.114.07-.34.433-.582zM11 12.849v-1.698c.22.071.412.164.567.267.364.243.433.468.433.582 0 .114-.07.34-.433.582a2.305 2.305 0 01-.567.267z"/><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-13a1 1 0 10-2 0v.092a4.535 4.535 0 00-1.676.662C6.602 6.234 6 7.009 6 8c0 .99.602 1.765 1.324 2.246.48.32 1.054.545 1.676.662v1.941c-.391-.127-.68-.317-.843-.504a1 1 0 10-1.51 1.31c.562.649 1.413 1.076 2.353 1.253V15a1 1 0 102 0v-.092a4.535 4.535 0 001.676-.662C13.398 13.766 14 12.991 14 12c0-.99-.602-1.765-1.324-2.246A4.535 4.535 0 0011 9.092V7.151c.391.127.68.317.843.504a1 1 0 101.511-1.31c-.563-.649-1.413-1.076-2.354-1.253V5z" clip-rule="evenodd"/></svg>
+    Produktkosten (PK)
+    <div class="aside-item-dot ok"></div>
+  </div>
+  <div class="aside-item" onclick="nav('artikel', this)">
+    <svg width="14" height="14" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M5 4a3 3 0 00-3 3v6a3 3 0 003 3h10a3 3 0 003-3V7a3 3 0 00-3-3H5zm-1 9v-1h5v2H5a1 1 0 01-1-1zm7 1h4a1 1 0 001-1v-1h-5v2zm0-4h5V8h-5v2zM9 8H4v2h5V8z" clip-rule="evenodd"/></svg>
+    Artikelstamm
+    <div class="aside-item-dot"></div>
+  </div>
+
+  <span class="aside-section">Berechnung</span>
+  <div class="aside-item" onclick="nav('praemissen', this)">
+    <svg width="14" height="14" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M11.49 3.17c-.38-1.56-2.6-1.56-2.98 0a1.532 1.532 0 01-2.286.948c-1.372-.836-2.942.734-2.106 2.106.54.886.061 2.042-.947 2.287-1.561.379-1.561 2.6 0 2.978a1.532 1.532 0 01.947 2.287c-.836 1.372.734 2.942 2.106 2.106a1.532 1.532 0 012.287.947c.379 1.561 2.6 1.561 2.978 0a1.533 1.533 0 012.287-.947c1.372.836 2.942-.734 2.106-2.106a1.533 1.533 0 01.947-2.287c1.561-.379 1.561-2.6 0-2.978a1.532 1.532 0 01-.947-2.287c.836-1.372-.734-2.942-2.106-2.106a1.532 1.532 0 01-2.287-.947zM10 13a3 3 0 100-6 3 3 0 000 6z" clip-rule="evenodd"/></svg>
+    Prämissen & DB-Grenzen
+    <div class="aside-item-dot ok"></div>
+  </div>
+  <div class="aside-item" onclick="nav('bundeslaender', this)">
+    <svg width="14" height="14" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd"/></svg>
+    Marktdaten BL
+    <div class="aside-item-dot ok"></div>
+  </div>
+
+  <span class="aside-section">System</span>
+  <div class="aside-item" onclick="nav('system', this)">
+    <svg width="14" height="14" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M2 5a2 2 0 012-2h12a2 2 0 012 2v10a2 2 0 01-2 2H4a2 2 0 01-2-2V5zm3.293 1.293a1 1 0 011.414 0l3 3a1 1 0 010 1.414l-3 3a1 1 0 01-1.414-1.414L7.586 10 5.293 7.707a1 1 0 010-1.414zM11 12a1 1 0 100 2h3a1 1 0 100-2h-3z" clip-rule="evenodd"/></svg>
+    Systemeinstellungen
+  </div>
+  <div class="aside-item" onclick="nav('changelog', this)">
+    <svg width="14" height="14" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd"/></svg>
+    Änderungshistorie
+  </div>
+
+  <div class="aside-spacer"></div>
+  <div class="aside-footer">
+    Letztes Update<br>
+    <strong>PK 26 · 01.05.2025</strong>
+  </div>
+</aside>
+
+<!-- ════════════════════════════════════════════
+     MAIN
+════════════════════════════════════════════ -->
+<main>
+  <div class="topbar">
+    <div class="topbar-crumb">
+      Admin &rsaquo; <span id="crumb-title">Rampenpreise (RP 26)</span>
+    </div>
+    <div class="topbar-spacer"></div>
+    <button class="btn btn-ghost btn-sm" onclick="exportCSV()">
+      <svg width="12" height="12" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z" clip-rule="evenodd"/></svg>
+      Export CSV
+    </button>
+    <button class="btn btn-gold btn-sm" onclick="saveAll()">
+      <svg width="12" height="12" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+      Änderungen speichern
+    </button>
+  </div>
+
+  <div class="content">
+
+    <!-- ══ PAGE: RAMPENPREISE ══ -->
+    <div class="page active" id="page-rp">
+
+      <div class="stat-strip">
+        <div class="stat-card">
+          <div class="stat-label">Artikel gesamt</div>
+          <div class="stat-val">47</div>
+          <div class="stat-change">RP 26 · Stand Jan 2026</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Ø Rampenpreis Fass</div>
+          <div class="stat-val">196,10</div>
+          <div class="stat-change up">↑ +2,1% vs. Vorjahr</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Preisstände aktuell</div>
+          <div class="stat-val">✓</div>
+          <div class="stat-change up">Alle Artikel gepflegt</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Letzte Änderung</div>
+          <div class="stat-val" style="font-size:14px;">15. Jan</div>
+          <div class="stat-change">durch Admin · D. Wallmeier</div>
+        </div>
+      </div>
+
+      <div class="alert alert-warn">
+        <svg width="15" height="15" viewBox="0 0 20 20" fill="currentColor" style="flex-shrink:0; margin-top:1px;"><path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/></svg>
+        <div><strong>Hinweis:</strong> Preisänderungen wirken sich sofort auf alle neu erstellten Kalkulationen aus. Bestehende gespeicherte Kalkulationen bleiben unberührt.</div>
+      </div>
+
+      <div class="card">
+        <div class="card-head">
+          <div class="card-head-icon" style="background:var(--gold-pale); color:var(--gold);">🏷</div>
+          <div>
+            <div class="card-head-title">Rampenpreise je Artikel (RP 26)</div>
+            <div class="card-head-sub">Direkt bearbeitbar · Klick ins Feld zum Ändern</div>
+          </div>
+          <div class="card-head-actions">
+            <div class="tabs" style="margin-bottom:0;">
+              <div class="tab active" onclick="filterGebinde('all',this)">Alle</div>
+              <div class="tab" onclick="filterGebinde('FASS',this)">Fass</div>
+              <div class="tab" onclick="filterGebinde('FLASCHE',this)">Flasche</div>
+              <div class="tab" onclick="filterGebinde('TANKBIER',this)">Tank</div>
+            </div>
+          </div>
+        </div>
+        <div style="overflow-x:auto;">
+          <table class="etable" id="rp-table">
+            <thead>
+              <tr>
+                <th>Art.-Nr.</th>
+                <th>Bezeichnung</th>
+                <th>Sorte</th>
+                <th>Gebinde</th>
+                <th>Rampe</th>
+                <th style="text-align:right;">RP (€/VKE)</th>
+                <th style="text-align:right;">RP (€/HL)</th>
+                <th style="text-align:right;">Log. Zuschlag</th>
+                <th style="text-align:right;">Gültig ab</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody id="rp-tbody"></tbody>
+          </table>
+        </div>
+        <div class="add-row-btn" onclick="openAddModal('rp')">
+          <svg width="14" height="14" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-11a1 1 0 10-2 0v2H7a1 1 0 100 2h2v2a1 1 0 102 0v-2h2a1 1 0 100-2h-2V7z" clip-rule="evenodd"/></svg>
+          Neuen Artikel hinzufügen
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ PAGE: PRODUKTKOSTEN ══ -->
+    <div class="page" id="page-pk">
+      <div class="alert alert-info">
+        <svg width="15" height="15" viewBox="0 0 20 20" fill="currentColor" style="flex-shrink:0;"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"/></svg>
+        <div>Produktkosten werden i.d.R. jährlich aus dem <strong>HK-System</strong> importiert. Hier können einzelne Werte manuell korrigiert werden.</div>
+      </div>
+      <div class="card">
+        <div class="card-head">
+          <div class="card-head-icon" style="background:var(--teal-pale); color:var(--teal);">💰</div>
+          <div>
+            <div class="card-head-title">Produktkosten je Artikel (PK 26)</div>
+            <div class="card-head-sub">Stand: 01.05.2025 · Rampe 1 (Warstein)</div>
+          </div>
+          <div class="card-head-actions">
+            <button class="btn btn-ghost btn-sm" onclick="showToast('Import gestartet...')">
+              <svg width="12" height="12" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM6.293 6.707a1 1 0 010-1.414l3-3a1 1 0 011.414 0l3 3a1 1 0 01-1.414 1.414L11 5.414V13a1 1 0 11-2 0V5.414L7.707 6.707a1 1 0 01-1.414 0z" clip-rule="evenodd"/></svg>
+              Excel importieren
+            </button>
+          </div>
+        </div>
+        <div style="overflow-x:auto;">
+          <table class="etable" id="pk-table">
+            <thead>
+              <tr>
+                <th>Art.-Nr.</th>
+                <th>Bezeichnung</th>
+                <th>Gebinde</th>
+                <th style="text-align:right;">PK var. (€/HL)</th>
+                <th style="text-align:right;">PK fix (€/HL)</th>
+                <th style="text-align:right;">Biersteuer</th>
+                <th style="text-align:right;">PK gesamt</th>
+                <th>Status</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody id="pk-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ PAGE: ARTIKELSTAMM ══ -->
+    <div class="page" id="page-artikel">
+      <div class="card">
+        <div class="card-head">
+          <div class="card-head-icon" style="background:var(--blue-pale); color:var(--blue);">📦</div>
+          <div>
+            <div class="card-head-title">Artikelstamm Warsteiner</div>
+            <div class="card-head-sub">Aktive Artikel im ELA-Kalkulator</div>
+          </div>
+          <div class="card-head-actions">
+            <button class="btn btn-ghost btn-sm" onclick="openAddModal('artikel')">+ Artikel anlegen</button>
+          </div>
+        </div>
+        <div style="overflow-x:auto;">
+          <table class="etable" id="artikel-table">
+            <thead>
+              <tr>
+                <th>Art.-Nr.</th>
+                <th>Dachmarke</th>
+                <th>Bezeichnung</th>
+                <th>PH Sorte</th>
+                <th>Gebinde</th>
+                <th>Aktiv</th>
+                <th>Sperr-VKORG</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody id="artikel-tbody"></tbody>
+          </table>
+        </div>
+        <div class="add-row-btn" onclick="openAddModal('artikel')">
+          <svg width="14" height="14" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-11a1 1 0 10-2 0v2H7a1 1 0 100 2h2v2a1 1 0 102 0v-2h2a1 1 0 100-2h-2V7z" clip-rule="evenodd"/></svg>
+          Neuen Artikel hinzufügen
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ PAGE: PRÄMISSEN ══ -->
+    <div class="page" id="page-praemissen">
+      <div class="two-col">
+        <div>
+          <div class="card">
+            <div class="card-head">
+              <div class="card-head-icon" style="background:var(--fog);">⚙️</div>
+              <div>
+                <div class="card-head-title">DB-Freigabegrenzen</div>
+                <div class="card-head-sub">Schwellenwerte für Profitabilitätsampel</div>
+              </div>
+            </div>
+            <div class="card-body">
+              <div class="setting-row">
+                <div class="setting-info">
+                  <div class="setting-label">DB2 Grenze – Stufe 1 (Grün)</div>
+                  <div class="setting-desc">Ab diesem DB2 €/HL wird die Ampel grün angezeigt. Freigabe ohne Rücksprache.</div>
+                </div>
+                <div class="setting-control">
+                  <input type="number" value="20.00" step="0.5" min="0">
+                </div>
+              </div>
+              <div class="setting-row">
+                <div class="setting-info">
+                  <div class="setting-label">DB2 Grenze – Stufe 2 (Gelb)</div>
+                  <div class="setting-desc">Zwischen Stufe 2 und 1: Gelb / Rücksprache VKD erforderlich.</div>
+                </div>
+                <div class="setting-control">
+                  <input type="number" value="0.00" step="0.5">
+                </div>
+              </div>
+              <div class="setting-row">
+                <div class="setting-info">
+                  <div class="setting-label">DB2 Grenze – EL Puro (separat)</div>
+                  <div class="setting-desc">Eigene Profitabilitätsgrenze für EL Puro Mineralwasser-Artikel.</div>
+                </div>
+                <div class="setting-control">
+                  <input type="number" value="12.00" step="0.5">
+                </div>
+              </div>
+              <div class="setting-row">
+                <div class="setting-info">
+                  <div class="setting-label">Strukturkosten (€/HL)</div>
+                  <div class="setting-desc">Fixer Strukturkostenanteil für alle Artikel. Quelle: CO-Daten Plan WJ 2025.</div>
+                </div>
+                <div class="setting-control">
+                  <input type="number" value="-27.28" step="0.01">
+                </div>
+              </div>
+              <div class="setting-row">
+                <div class="setting-info">
+                  <div class="setting-label">Verwaltungskosten (€/HL)</div>
+                  <div class="setting-desc">Fixer Verwaltungskostenanteil. Quelle: CO-Daten Plan WJ 2025.</div>
+                </div>
+                <div class="setting-control">
+                  <input type="number" value="-19.71" step="0.01">
+                </div>
+              </div>
+              <div class="setting-row">
+                <div class="setting-info">
+                  <div class="setting-label">Biersteuer Pils (€/HL)</div>
+                  <div class="setting-desc">Aktueller gesetzlicher Biersteuersatz für Pils/Standardbier.</div>
+                </div>
+                <div class="setting-control">
+                  <input type="number" value="8.65" step="0.01">
+                </div>
+              </div>
+              <div class="setting-row">
+                <div class="setting-info">
+                  <div class="setting-label">Frachtkosten Direktgeschäft – FHB (€/HL)</div>
+                  <div class="setting-desc">Frachtkosten für FHB Direktgeschäft. Wird in DB-Berechnung abgezogen.</div>
+                </div>
+                <div class="setting-control">
+                  <input type="number" value="-33.00" step="0.5">
+                </div>
+              </div>
+              <div class="setting-row">
+                <div class="setting-info">
+                  <div class="setting-label">Frachtkosten Direktgeschäft – KLB (€/HL)</div>
+                  <div class="setting-desc">Frachtkosten für KLB Direktgeschäft.</div>
+                </div>
+                <div class="setting-control">
+                  <input type="number" value="-38.80" step="0.5">
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <div class="card">
+            <div class="card-head">
+              <div class="card-head-icon" style="background:var(--gold-pale);">📋</div>
+              <div>
+                <div class="card-head-title">Prämissen-Hinweise</div>
+              </div>
+            </div>
+            <div class="card-body" style="font-size:12.5px; color:var(--ink-60); line-height:1.8;">
+              <p style="margin-bottom:10px;">Folgende Prämissen gelten für alle Kalkulationen:</p>
+              <ul style="padding-left:16px; display:flex; flex-direction:column; gap:6px;">
+                <li>Produktkosten und Rampenpreise werden auf die ausgewählte Rampe gesetzt</li>
+                <li>Artikel die an der Rampe nicht verfügbar sind werden gesperrt angezeigt</li>
+                <li>DB-Freigabegrenzen gelten für GVL, VKD und Leitung Geschäftsbereich</li>
+                <li>Kalkulationsjahr: <strong>2026</strong></li>
+                <li>Datenstand PK: <strong>01.05.2025</strong></li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-head">
+              <div class="card-head-icon" style="background:var(--fog);">🏦</div>
+              <div>
+                <div class="card-head-title">Verkaufsorganisationen</div>
+              </div>
+            </div>
+            <div style="overflow:hidden;">
+              <table class="etable" style="font-size:12px;">
+                <thead><tr><th>VKORG</th><th>Bezeichnung</th><th>Rampe</th><th>Aktiv</th></tr></thead>
+                <tbody>
+                  <tr><td class="pad"><span style="font-family:'JetBrains Mono',monospace;">1</span></td><td class="pad">Warstein Indirektes Geschäft</td><td class="pad">Warstein</td><td class="pad"><span class="tag tag-green">Aktiv</span></td></tr>
+                  <tr><td class="pad"><span style="font-family:'JetBrains Mono',monospace;">5</span></td><td class="pad">KLB Direktgeschäft</td><td class="pad">Holzkirchen</td><td class="pad"><span class="tag tag-green">Aktiv</span></td></tr>
+                  <tr><td class="pad"><span style="font-family:'JetBrains Mono',monospace;">FHB</span></td><td class="pad">FHB Direktgeschäft</td><td class="pad">Herford</td><td class="pad"><span class="tag tag-green">Aktiv</span></td></tr>
+                  <tr><td class="pad"><span style="font-family:'JetBrains Mono',monospace;">AT</span></td><td class="pad">Österreich Indirektes Geschäft</td><td class="pad">–</td><td class="pad"><span class="tag tag-slate">Inaktiv</span></td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ PAGE: BUNDESLÄNDER / MARKTDATEN ══ -->
+    <div class="page" id="page-bundeslaender">
+      <div class="alert alert-info">
+        <svg width="15" height="15" viewBox="0 0 20 20" fill="currentColor" style="flex-shrink:0;"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"/></svg>
+        <div>Marktdaten werden jährlich aus der <strong>Marktforschung</strong> aktualisiert (Quelle: GfK / Statista). Jahr: 2024.</div>
+      </div>
+      <div class="card">
+        <div class="card-head">
+          <div class="card-head-icon" style="background:#fce8ff; color:#8b008b;">🗺</div>
+          <div>
+            <div class="card-head-title">Marktdaten je Bundesland</div>
+            <div class="card-head-sub">Ø HL/Objekt je Biersort · Jahr 2024</div>
+          </div>
+          <div class="card-head-actions">
+            <button class="btn btn-ghost btn-sm" onclick="showToast('Excel Import gestartet...')">
+              <svg width="12" height="12" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM6.293 6.707a1 1 0 010-1.414l3-3a1 1 0 011.414 0l3 3a1 1 0 01-1.414 1.414L11 5.414V13a1 1 0 11-2 0V5.414L7.707 6.707a1 1 0 01-1.414 0z" clip-rule="evenodd"/></svg>
+              Jahresupdate importieren
+            </button>
+          </div>
+        </div>
+        <div style="overflow-x:auto;">
+          <table class="etable">
+            <thead>
+              <tr>
+                <th>Bundesland</th>
+                <th style="text-align:right;">Pils HL</th>
+                <th style="text-align:right;">Weißbier HL</th>
+                <th style="text-align:right;">Hellbier HL</th>
+                <th style="text-align:right;">Dunkelbier HL</th>
+                <th style="text-align:right;">Lager HL</th>
+                <th style="text-align:right;">Altbier HL</th>
+                <th>Jahr</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody id="bl-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ PAGE: SYSTEM ══ -->
+    <div class="page" id="page-system">
+      <div class="two-col">
+        <div>
+          <div class="card">
+            <div class="card-head">
+              <div class="card-head-icon" style="background:var(--fog);">🔧</div>
+              <div>
+                <div class="card-head-title">Systemeinstellungen</div>
+                <div class="card-head-sub">Globale Konfiguration des Kalkulators</div>
+              </div>
+            </div>
+            <div class="card-body">
+              <div class="setting-row">
+                <div class="setting-info">
+                  <div class="setting-label">Kalkulationsjahr</div>
+                  <div class="setting-desc">Das aktive Geschäftsjahr für alle neuen Kalkulationen.</div>
+                </div>
+                <div class="setting-control"><input type="number" value="2026" min="2020" max="2030"></div>
+              </div>
+              <div class="setting-row">
+                <div class="setting-info">
+                  <div class="setting-label">Automatische Speicherung</div>
+                  <div class="setting-desc">Kalkulationen automatisch alle 5 Minuten zwischenspeichern.</div>
+                </div>
+                <div class="setting-control">
+                  <label class="toggle">
+                    <input type="checkbox" checked>
+                    <div class="toggle-track"></div>
+                    <div class="toggle-thumb"></div>
+                  </label>
+                </div>
+              </div>
+              <div class="setting-row">
+                <div class="setting-info">
+                  <div class="setting-label">Blattschutz-Modus</div>
+                  <div class="setting-desc">Verhindert, dass Nutzer gesperrte Artikel trotzdem bearbeiten können.</div>
+                </div>
+                <div class="setting-control">
+                  <label class="toggle">
+                    <input type="checkbox" checked>
+                    <div class="toggle-track"></div>
+                    <div class="toggle-thumb"></div>
+                  </label>
+                </div>
+              </div>
+              <div class="setting-row">
+                <div class="setting-info">
+                  <div class="setting-label">Maximale Laufzeit (Jahre)</div>
+                  <div class="setting-desc">Obergrenze für die eingebbare Vertragslaufzeit.</div>
+                </div>
+                <div class="setting-control"><input type="number" value="15" min="1" max="30"></div>
+              </div>
+              <div class="setting-row">
+                <div class="setting-info">
+                  <div class="setting-label">Standard-VKORG</div>
+                  <div class="setting-desc">Vorausgewählte Verkaufsorganisation beim Öffnen einer neuen Kalkulation.</div>
+                </div>
+                <div class="setting-control">
+                  <select>
+                    <option value="1" selected>1 – Warstein Indirektes Geschäft</option>
+                    <option value="5">5 – KLB Direktgeschäft</option>
+                    <option value="fhb">FHB Direktgeschäft</option>
+                  </select>
+                </div>
+              </div>
+              <div class="setting-row">
+                <div class="setting-info">
+                  <div class="setting-label">DB-Schema in Kalkulator anzeigen</div>
+                  <div class="setting-desc">DB-Kaskade (DB1–DB7) im Berechnung-Tab für alle Nutzer sichtbar machen.</div>
+                </div>
+                <div class="setting-control">
+                  <label class="toggle">
+                    <input type="checkbox" checked>
+                    <div class="toggle-track"></div>
+                    <div class="toggle-thumb"></div>
+                  </label>
+                </div>
+              </div>
+              <div class="setting-row">
+                <div class="setting-info">
+                  <div class="setting-label">Wettbewerber-Felder aktiv</div>
+                  <div class="setting-desc">Wettbewerber-Eingabefelder im Kalkulator für Nutzer einblenden.</div>
+                </div>
+                <div class="setting-control">
+                  <label class="toggle">
+                    <input type="checkbox">
+                    <div class="toggle-track"></div>
+                    <div class="toggle-thumb"></div>
+                  </label>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <div class="card">
+            <div class="card-head">
+              <div class="card-head-icon" style="background:var(--red-pale); color:var(--red);">⚠️</div>
+              <div>
+                <div class="card-head-title">Gefahrenzone</div>
+                <div class="card-head-sub">Irreversible Aktionen</div>
+              </div>
+            </div>
+            <div class="card-body" style="display:flex; flex-direction:column; gap:12px;">
+              <div>
+                <div style="font-weight:600; font-size:13px; margin-bottom:4px;">Alle Entwürfe löschen</div>
+                <div style="font-size:12px; color:var(--slate); margin-bottom:8px;">Löscht alle nicht übertragenen Kalkulations-Entwürfe.</div>
+                <button class="btn btn-danger btn-sm">Entwürfe löschen</button>
+              </div>
+              <div style="border-top:1px solid var(--fog); padding-top:12px;">
+                <div style="font-weight:600; font-size:13px; margin-bottom:4px;">Stammdaten zurücksetzen</div>
+                <div style="font-size:12px; color:var(--slate); margin-bottom:8px;">Setzt RP und PK auf den letzten importierten Stand zurück.</div>
+                <button class="btn btn-danger btn-sm" onclick="showToast('Bestätigung erforderlich...')">Auf Import-Stand zurücksetzen</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-head">
+              <div class="card-head-icon" style="background:var(--green-pale); color:var(--green);">✅</div>
+              <div><div class="card-head-title">System-Status</div></div>
+            </div>
+            <div class="card-body" style="display:flex; flex-direction:column; gap:10px;">
+              <div style="display:flex; justify-content:space-between; font-size:12.5px;">
+                <span style="color:var(--slate);">Datenbank</span>
+                <span class="tag tag-green">Online</span>
+              </div>
+              <div style="display:flex; justify-content:space-between; font-size:12.5px;">
+                <span style="color:var(--slate);">Dataverse Sync</span>
+                <span class="tag tag-green">Aktiv</span>
+              </div>
+              <div style="display:flex; justify-content:space-between; font-size:12.5px;">
+                <span style="color:var(--slate);">Letzter Import PK</span>
+                <span style="font-family:'JetBrains Mono',monospace; font-size:11px;">01.05.2025</span>
+              </div>
+              <div style="display:flex; justify-content:space-between; font-size:12.5px;">
+                <span style="color:var(--slate);">Letzter Import RP</span>
+                <span style="font-family:'JetBrains Mono',monospace; font-size:11px;">15.01.2026</span>
+              </div>
+              <div style="display:flex; justify-content:space-between; font-size:12.5px;">
+                <span style="color:var(--slate);">Version</span>
+                <span class="tag tag-gold">V 1.0.3</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ PAGE: CHANGELOG ══ -->
+    <div class="page" id="page-changelog">
+      <div class="card">
+        <div class="card-head">
+          <div class="card-head-icon" style="background:var(--fog);">🕐</div>
+          <div>
+            <div class="card-head-title">Änderungshistorie</div>
+            <div class="card-head-sub">Alle Admin-Änderungen der letzten 30 Tage</div>
+          </div>
+        </div>
+        <div class="card-body" id="changelog-body"></div>
+      </div>
+    </div>
+
+  </div><!-- /content -->
+</main>
+
+<!-- ════════════════════════════════════════════
+     MODAL: Artikel hinzufügen
+════════════════════════════════════════════ -->
+<div class="modal-overlay" id="modal" onclick="closeModal(event)">
+  <div class="modal-box">
+    <div class="modal-title" id="modal-title">Neuen Artikel anlegen</div>
+    <div class="modal-sub" id="modal-sub">Felder ausfüllen und speichern.</div>
+    <div class="modal-form" id="modal-form"></div>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" onclick="document.getElementById('modal').classList.remove('show')">Abbrechen</button>
+      <button class="btn btn-gold" onclick="submitModal()">Speichern</button>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast">
+  <div class="toast-dot"></div>
+  <span id="toast-msg">Gespeichert</span>
+</div>
+
+<script>
+// ══════════════════════════════════════════
+//  DATA
+// ══════════════════════════════════════════
+const RP_DATA = [
+  { nr:132,  name:"WARSTEINER PILSENER 50 L KEG",        sorte:"PILS",      geb:"FASS",    rampe:"Warstein Ind.", rpVke:98.05,  rpHL:196.10, logi:0,    gueltig:"01.01.2026" },
+  { nr:133,  name:"WARSTEINER PILSENER 30 L KEG",        sorte:"PILS",      geb:"FASS",    rampe:"Warstein Ind.", rpVke:58.83,  rpHL:196.10, logi:1.02, gueltig:"01.01.2026" },
+  { nr:130,  name:"WARSTEINER PP Tankbier",               sorte:"PILS",      geb:"TANKBIER",rampe:"Warstein Ind.", rpVke:214.00, rpHL:214.00, logi:0,    gueltig:"01.01.2026" },
+  { nr:242,  name:"WARSTEINER PILSENER 24 x 0,33 L",     sorte:"PILS",      geb:"FLASCHE", rampe:"Warstein Ind.", rpVke:12.46,  rpHL:157.32, logi:0.79, gueltig:"01.01.2026" },
+  { nr:244,  name:"WARSTEINER PILSENER 20 x 0,50 L",     sorte:"PILS",      geb:"FLASCHE", rampe:"Warstein Ind.", rpVke:13.12,  rpHL:131.20, logi:1.00, gueltig:"01.01.2026" },
+  { nr:295,  name:"WARSTEINER ALKOHOLFREI 24 x 0,33 L",  sorte:"AF PILS",   geb:"FLASCHE", rampe:"Warstein Ind.", rpVke:12.46,  rpHL:157.32, logi:0.79, gueltig:"01.01.2026" },
+  { nr:508,  name:"WARSTEINER RADLER ZITRONE 24 x 0,33", sorte:"RADLER",    geb:"FLASCHE", rampe:"Warstein Ind.", rpVke:12.46,  rpHL:157.32, logi:0.27, gueltig:"01.01.2026" },
+  { nr:417,  name:"WARSTEINER EXTRA 4 x 6 x 0,33 L",    sorte:"PILS",      geb:"FLASCHE", rampe:"Warstein Ind.", rpVke:12.48,  rpHL:157.58, logi:0.79, gueltig:"01.01.2026" },
+  { nr:137,  name:"WARSTEINER PILSENER 10 L Stichfass",  sorte:"PILS",      geb:"FASS",    rampe:"Warstein Ind.", rpVke:21.66,  rpHL:216.60, logi:0,    gueltig:"01.01.2026" },
+  { nr:842,  name:"WARSTEINER HERB 24 x 0,33 L",         sorte:"PILS",      geb:"FLASCHE", rampe:"Warstein Ind.", rpVke:12.46,  rpHL:157.32, logi:0.79, gueltig:"01.01.2026" },
+];
+
+const PK_DATA = [
+  { nr:132,  name:"WARSTEINER PILSENER 50 L KEG",       geb:"FASS",    pkVar:12.72, pkFix:14.18, bierst:8.65 },
+  { nr:133,  name:"WARSTEINER PILSENER 30 L KEG",       geb:"FASS",    pkVar:14.64, pkFix:19.69, bierst:8.65 },
+  { nr:130,  name:"WARSTEINER PP Tankbier",              geb:"TANKBIER",pkVar:10.22, pkFix:5.96,  bierst:8.65 },
+  { nr:242,  name:"WARSTEINER PILSENER 24 x 0,33 L",   geb:"FLASCHE", pkVar:22.64, pkFix:25.34, bierst:8.65 },
+  { nr:244,  name:"WARSTEINER PILSENER 20 x 0,50 L",   geb:"FLASCHE", pkVar:18.67, pkFix:20.55, bierst:8.65 },
+  { nr:295,  name:"WARSTEINER ALKOHOLFREI 24x0,33",     geb:"FLASCHE", pkVar:28.56, pkFix:29.25, bierst:0.00 },
+  { nr:508,  name:"WARSTEINER RADLER ZITRONE 24x0,33",  geb:"FLASCHE", pkVar:25.03, pkFix:27.13, bierst:3.93 },
+  { nr:417,  name:"WARSTEINER EXTRA 4x6x0,33",          geb:"FLASCHE", pkVar:32.56, pkFix:35.17, bierst:6.29 },
+];
+
+const ARTIKEL_DATA = [
+  { nr:132, marke:"WARSTEINER", name:"WARSTEINER PILSENER 50 L KEG",        sorte:"PILS",      geb:"FASS",    aktiv:true, sperr:"–" },
+  { nr:133, marke:"WARSTEINER", name:"WARSTEINER PILSENER 30 L KEG",        sorte:"PILS",      geb:"FASS",    aktiv:true, sperr:"–" },
+  { nr:130, marke:"WARSTEINER", name:"WARSTEINER PP Tankbier",               sorte:"PILS",      geb:"TANKBIER",aktiv:true, sperr:"–" },
+  { nr:242, marke:"WARSTEINER", name:"WARSTEINER PILSENER 24 x 0,33 L",    sorte:"PILS",      geb:"FLASCHE", aktiv:true, sperr:"–" },
+  { nr:244, marke:"WARSTEINER", name:"WARSTEINER PILSENER 20 x 0,50 L",    sorte:"PILS",      geb:"FLASCHE", aktiv:true, sperr:"–" },
+  { nr:295, marke:"WARSTEINER", name:"WARSTEINER ALKOHOLFREI 24 x 0,33 L", sorte:"AF PILS",   geb:"FLASCHE", aktiv:true, sperr:"–" },
+  { nr:508, marke:"WARSTEINER", name:"WARSTEINER RADLER ZITRONE 24 x 0,33",sorte:"RADLER",    geb:"FLASCHE", aktiv:true, sperr:"–" },
+  { nr:712, marke:"WARSTEINER", name:"WARST. RADLER AF 0,0% 24x0,33",      sorte:"AF RADLER", geb:"FLASCHE", aktiv:false,sperr:"FHB" },
+  { nr:417, marke:"WARSTEINER", name:"WARSTEINER EXTRA 4 x 6 x 0,33 L",   sorte:"PILS",      geb:"FLASCHE", aktiv:true, sperr:"–" },
+  { nr:842, marke:"WARSTEINER", name:"WARSTEINER HERB 24 x 0,33 L",        sorte:"PILS",      geb:"FLASCHE", aktiv:true, sperr:"AT" },
+];
+
+const BL_DATA = [
+  { bl:"Baden-Württemberg", pils:7.37,  weiss:4.67, hell:2.44, dunkel:0.10, lager:0.23, alt:0.01 },
+  { bl:"Bayern",            pils:1.81,  weiss:9.64, hell:45.58,dunkel:1.86, lager:0.17, alt:0.00 },
+  { bl:"Berlin",            pils:22.92, weiss:5.08, hell:7.51, dunkel:0.77, lager:1.76, alt:0.13 },
+  { bl:"Nordrhein-Westfalen",pils:28.76,weiss:3.99, hell:1.44, dunkel:0.83, lager:0.56, alt:3.06 },
+  { bl:"Hamburg",           pils:7.80,  weiss:1.25, hell:1.26, dunkel:0.14, lager:0.74, alt:0.14 },
+  { bl:"Hessen",            pils:11.56, weiss:3.92, hell:2.56, dunkel:0.23, lager:0.66, alt:0.05 },
+];
+
+const CHANGELOG = [
+  { time:"Heute 14:32", text:"Rampenpreis <strong>50L KEG</strong> von 195,00 auf 196,10 €/HL angepasst", user:"D. Wallmeier", color:"var(--gold)" },
+  { time:"Heute 10:15", text:"Logistikzuschlag Herford auf <strong>1,02 €/VKE</strong> aktualisiert", user:"D. Wallmeier", color:"var(--teal)" },
+  { time:"Gestern 16:44",text:"<strong>PK 26</strong> vollständig aus HK-System importiert (493 Artikel)", user:"System", color:"var(--blue)" },
+  { time:"12.01.2026",   text:"DB2-Freigabegrenze von 18,00 auf <strong>20,00 €/HL</strong> erhöht", user:"K. Schreiber", color:"var(--red)" },
+  { time:"08.01.2026",   text:"Artikel <strong>842 – Warsteiner Herb</strong> für VKORG AT gesperrt", user:"D. Wallmeier", color:"var(--red)" },
+  { time:"02.01.2026",   text:"Kalkulationsjahr auf <strong>2026</strong> umgestellt", user:"System", color:"var(--green)" },
+  { time:"15.12.2025",   text:"Strukturkosten auf <strong>−27,28 €/HL</strong> aktualisiert (Plan WJ 2025)", user:"K. Schreiber", color:"var(--teal)" },
+];
+
+// ══════════════════════════════════════════
+//  RENDER
+// ══════════════════════════════════════════
+const GEB_CHIP = { FASS:'background:#e8f0fe;color:#1967d2', FLASCHE:'background:#fce8ff;color:#8b008b', TANKBIER:'background:#fff0e0;color:#c45000', DOSE:'background:#e8ffee;color:#1a7340' };
+
+function renderRP(filter='all') {
+  const data = filter==='all' ? RP_DATA : RP_DATA.filter(r => r.geb===filter);
+  document.getElementById('rp-tbody').innerHTML = data.map(r => `
+    <tr data-geb="${r.geb}">
+      <td class="pad" style="font-family:'JetBrains Mono',monospace; font-size:11px; color:var(--slate);">${r.nr}</td>
+      <td><input type="text" value="${r.name}" style="min-width:200px;"></td>
+      <td class="pad"><span style="font-size:10px; font-weight:700; background:var(--blue-pale); color:var(--blue); padding:2px 7px; border-radius:4px;">${r.sorte}</span></td>
+      <td class="pad"><span style="font-size:10px; font-weight:700; padding:2px 8px; border-radius:5px; ${GEB_CHIP[r.geb]||''}">${r.geb}</span></td>
+      <td class="pad" style="font-size:12px; color:var(--slate);">${r.rampe}</td>
+      <td class="num-cell"><input type="number" value="${r.rpVke.toFixed(2)}" step="0.01"></td>
+      <td class="num-cell"><input type="number" value="${r.rpHL.toFixed(2)}" step="0.01" style="font-weight:700; color:var(--ink);"></td>
+      <td class="num-cell"><input type="number" value="${r.logi.toFixed(2)}" step="0.01"></td>
+      <td class="pad" style="font-size:11px; font-family:'JetBrains Mono',monospace; color:var(--slate);">${r.gueltig}</td>
+      <td>
+        <div class="row-actions">
+          <div class="row-btn edit" title="Duplizieren">⎘</div>
+          <div class="row-btn" title="Löschen" onclick="deleteRow(this)">✕</div>
+        </div>
+      </td>
+    </tr>`).join('');
+}
+
+function renderPK() {
+  document.getElementById('pk-tbody').innerHTML = PK_DATA.map(r => {
+    const total = r.pkVar + r.pkFix + r.bierst;
+    const outdated = r.pkVar === 0;
+    return `<tr>
+      <td class="pad" style="font-family:'JetBrains Mono',monospace; font-size:11px; color:var(--slate);">${r.nr}</td>
+      <td><input type="text" value="${r.name}" style="min-width:180px;"></td>
+      <td class="pad"><span style="font-size:10px; font-weight:700; padding:2px 8px; border-radius:5px; ${GEB_CHIP[r.geb]||''}">${r.geb}</span></td>
+      <td class="num-cell"><input type="number" value="${r.pkVar.toFixed(2)}" step="0.01"></td>
+      <td class="num-cell"><input type="number" value="${r.pkFix.toFixed(2)}" step="0.01"></td>
+      <td class="num-cell"><input type="number" value="${r.bierst.toFixed(2)}" step="0.01"></td>
+      <td class="pad" style="text-align:right; font-family:'JetBrains Mono',monospace; font-weight:700; font-size:12px;">${total.toFixed(2)}</td>
+      <td class="pad"><span style="font-size:10px; font-weight:700; padding:2px 8px; border-radius:5px; ${outdated?'background:var(--red-pale);color:var(--red)':'background:var(--green-pale);color:var(--green)'}">${outdated?'Prüfen':'OK'}</span></td>
+      <td><div class="row-actions"><div class="row-btn" onclick="deleteRow(this)">✕</div></div></td>
+    </tr>`;
+  }).join('');
+}
+
+function renderArtikel() {
+  document.getElementById('artikel-tbody').innerHTML = ARTIKEL_DATA.map(r => `
+    <tr>
+      <td class="pad" style="font-family:'JetBrains Mono',monospace; font-size:11px; color:var(--slate);">${r.nr}</td>
+      <td class="pad" style="font-size:11px; font-weight:700; color:var(--ink);">${r.marke}</td>
+      <td><input type="text" value="${r.name}" style="min-width:200px;"></td>
+      <td class="pad"><span style="font-size:10px; font-weight:700; background:var(--blue-pale); color:var(--blue); padding:2px 7px; border-radius:4px;">${r.sorte}</span></td>
+      <td class="pad"><span style="font-size:10px; font-weight:700; padding:2px 8px; border-radius:5px; ${GEB_CHIP[r.geb]||''}">${r.geb}</span></td>
+      <td class="pad">
+        <label class="toggle" style="transform:scale(.85);">
+          <input type="checkbox" ${r.aktiv?'checked':''}>
+          <div class="toggle-track"></div>
+          <div class="toggle-thumb"></div>
+        </label>
+      </td>
+      <td class="pad"><span style="font-size:11px; font-family:'JetBrains Mono',monospace; color:${r.sperr!=='–'?'var(--red)':'var(--slate)'};">${r.sperr}</span></td>
+      <td><div class="row-actions"><div class="row-btn" onclick="deleteRow(this)">✕</div></div></td>
+    </tr>`).join('');
+}
+
+function renderBL() {
+  document.getElementById('bl-tbody').innerHTML = BL_DATA.map(r => `
+    <tr>
+      <td class="pad" style="font-weight:600;">${r.bl}</td>
+      <td class="num-cell"><input type="number" value="${r.pils.toFixed(2)}" step="0.01"></td>
+      <td class="num-cell"><input type="number" value="${r.weiss.toFixed(2)}" step="0.01"></td>
+      <td class="num-cell"><input type="number" value="${r.hell.toFixed(2)}" step="0.01"></td>
+      <td class="num-cell"><input type="number" value="${r.dunkel.toFixed(2)}" step="0.01"></td>
+      <td class="num-cell"><input type="number" value="${r.lager.toFixed(2)}" step="0.01"></td>
+      <td class="num-cell"><input type="number" value="${r.alt.toFixed(2)}" step="0.01"></td>
+      <td class="pad"><span style="font-size:10px; font-weight:700; background:var(--blue-pale); color:var(--blue); padding:2px 7px; border-radius:4px;">2024</span></td>
+      <td><div class="row-actions"><div class="row-btn edit">✎</div></div></td>
+    </tr>`).join('');
+}
+
+function renderChangelog() {
+  document.getElementById('changelog-body').innerHTML = CHANGELOG.map(c => `
+    <div class="changelog-row">
+      <div class="changelog-time">${c.time}</div>
+      <div class="changelog-dot" style="background:${c.color};"></div>
+      <div>
+        <div class="changelog-text">${c.text}</div>
+        <div class="changelog-user">${c.user}</div>
+      </div>
+    </div>`).join('');
+}
+
+// ══════════════════════════════════════════
+//  NAVIGATION
+// ══════════════════════════════════════════
+const CRUMB = {
+  rp:'Rampenpreise (RP 26)', pk:'Produktkosten (PK 26)',
+  artikel:'Artikelstamm', praemissen:'Prämissen & DB-Grenzen',
+  bundeslaender:'Marktdaten Bundesländer', system:'Systemeinstellungen', changelog:'Änderungshistorie'
+};
+
+function nav(id, el) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.aside-item').forEach(a => a.classList.remove('active'));
+  document.getElementById('page-' + id).classList.add('active');
+  if (el) el.classList.add('active');
+  document.getElementById('crumb-title').textContent = CRUMB[id] || id;
+}
+
+function filterGebinde(geb, el) {
+  document.querySelectorAll('.tabs .tab').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+  renderRP(geb);
+}
+
+// ══════════════════════════════════════════
+//  ACTIONS
+// ══════════════════════════════════════════
+function deleteRow(btn) {
+  const row = btn.closest('tr');
+  row.style.transition = 'opacity .2s, transform .2s';
+  row.style.opacity = '0';
+  row.style.transform = 'translateX(20px)';
+  setTimeout(() => row.remove(), 200);
+  showToast('Eintrag entfernt');
+}
+
+function saveAll() {
+  showToast('Alle Änderungen gespeichert ✓');
+  // Add to changelog
+  const entry = { time:'Gerade eben', text:'Manuelle Änderungen gespeichert', user:'Admin', color:'var(--gold)' };
+  CHANGELOG.unshift(entry);
+  if (document.getElementById('page-changelog').classList.contains('active')) renderChangelog();
+}
+
+function exportCSV() {
+  showToast('CSV Export gestartet...');
+}
+
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  document.getElementById('toast-msg').textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2800);
+}
+
+// ══════════════════════════════════════════
+//  MODAL
+// ══════════════════════════════════════════
+const MODAL_FORMS = {
+  rp: [
+    { label:'Artikel-Nr.', name:'nr', type:'number', placeholder:'z.B. 999' },
+    { label:'Bezeichnung', name:'name', type:'text', placeholder:'z.B. WARSTEINER PILSENER 50 L KEG' },
+    { label:'PH Sorte', name:'sorte', type:'text', placeholder:'PILS / RADLER / AF PILS ...' },
+    { label:'Gebinde', name:'geb', type:'text', placeholder:'FASS / FLASCHE / TANKBIER / DOSE' },
+    { label:'RP je VKE (€)', name:'rpVke', type:'number', placeholder:'98.05' },
+    { label:'RP je HL (€)', name:'rpHL', type:'number', placeholder:'196.10' },
+  ],
+  artikel: [
+    { label:'Artikel-Nr.', name:'nr', type:'number', placeholder:'z.B. 999' },
+    { label:'Dachmarke', name:'marke', type:'text', placeholder:'WARSTEINER' },
+    { label:'Bezeichnung', name:'name', type:'text', placeholder:'Vollständige Artikel-Bezeichnung' },
+    { label:'PH Sorte', name:'sorte', type:'text', placeholder:'PILS' },
+    { label:'Gebinde', name:'geb', type:'text', placeholder:'FASS / FLASCHE / TANKBIER / DOSE' },
+  ],
+};
+
+function openAddModal(type) {
+  const fields = MODAL_FORMS[type] || MODAL_FORMS.rp;
+  document.getElementById('modal-title').textContent = type==='rp' ? 'Neuen RP-Artikel anlegen' : 'Neuen Artikel anlegen';
+  document.getElementById('modal-sub').textContent = 'Alle Felder ausfüllen und speichern.';
+  document.getElementById('modal-form').innerHTML = fields.map(f => `
+    <div class="modal-field">
+      <label class="modal-label">${f.label}</label>
+      <input class="modal-input" type="${f.type}" placeholder="${f.placeholder}" name="${f.name}">
+    </div>`).join('');
+  document.getElementById('modal').classList.add('show');
+}
+
+function closeModal(e) {
+  if (e.target === document.getElementById('modal')) document.getElementById('modal').classList.remove('show');
+}
+
+function submitModal() {
+  document.getElementById('modal').classList.remove('show');
+  showToast('Neuer Eintrag gespeichert ✓');
+}
+
+// ══════════════════════════════════════════
+//  INIT
+// ══════════════════════════════════════════
+document.addEventListener('DOMContentLoaded', () => {
+  renderRP();
+  renderPK();
+  renderArtikel();
+  renderBL();
+  renderChangelog();
+});
+</script>
+</body>
+</html>
